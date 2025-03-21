@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Todo from './components/Todo';
 import TodoForm from './components/TodoFORM';
@@ -8,31 +8,43 @@ import Filter from './components/Filter';
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState(
-    [
-      {
-        id:1,
-        text:"Criar funcionalidade X no sistema",
-        category: "Trabalho",
-        isCompleted: false,
-      },
-      {
-        id:2,
-        text:"Ir para a academia",
-        category: "Pessoal",
-        isCompleted: false,
-      },
-      {
-        id:3,
-        text:"Estudar React",
-        category: "Estudos",
-        isCompleted: false,
-      }
-    ]);
+  const [todos, setTodos] = useState(() => {
+    // Try to get todos from localStorage
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    } else {
+      return [
+        {
+          id: 1,
+          text: "Criar funcionalidade X no sistema",
+          category: "Trabalho",
+          isCompleted: false,
+        },
+        {
+          id: 2,
+          text: "Ir para a academia",
+          category: "Pessoal",
+          isCompleted: false,
+        },
+        {
+          id: 3,
+          text: "Estudar React",
+          category: "Estudos",
+          isCompleted: false,
+        }
+      ];
+    }
+  });
 
       const [search, setSearch] = useState("");
       const [filter, setFilter] = useState("All");
       const [sort, setSort] = useState("Asc");
+      
+      // Effect to save todos to localStorage whenever they change
+      useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+      }, [todos]);
 
     const addTodo = (text,category)=> {
       const newTodos= [...todos,{
@@ -43,6 +55,7 @@ function App() {
       },
     ];
     setTodos(newTodos);
+    localStorage.setItem("todos", JSON.stringify(newTodos));
   };
 
 
@@ -52,6 +65,7 @@ function App() {
     todo.id !== id ? todo : null
     );
     setTodos(filteredTodos);
+    localStorage.setItem("todos", JSON.stringify(filteredTodos));
   };
 
   const completeTodo = (id)=> {
@@ -60,6 +74,7 @@ function App() {
       todo.id === id ? (todo.isCompleted = !todo.isCompleted) : todo
     );
     setTodos(newTodos);
+    localStorage.setItem("todos", JSON.stringify(newTodos));
   };
 
   return (
