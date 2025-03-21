@@ -46,11 +46,13 @@ function App() {
         localStorage.setItem("todos", JSON.stringify(todos));
       }, [todos]);
 
-    const addTodo = (text,category)=> {
+    const addTodo = (text, category, date, time)=> {
       const newTodos= [...todos,{
         id:Math.floor(Math.random()*10000),
         text,
         category,
+        date,
+        time,
         isCompleted: false,
       },
     ];

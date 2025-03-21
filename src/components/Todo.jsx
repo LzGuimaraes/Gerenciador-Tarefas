@@ -10,6 +10,15 @@ const Todo = ({todo, deleteTodo, completeTodo })=> {
     <div className="content">
       <p>{todo.text}</p>
       <p className="category">({todo.category})</p>
+      {todo.date && todo.time && (
+        <p className="date-time">{todo.date} às {todo.time}</p>
+      )}
+      {todo.date && !todo.time && (
+        <p className="date-time">Data: {todo.date}</p>
+      )}
+      {!todo.date && todo.time && (
+        <p className="date-time">Hora: {todo.time}</p>
+      )}
     </div>
     <div>
       <button className="complete" onClick={()=> completeTodo(todo.id)}>
